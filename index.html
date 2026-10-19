@@ -1,177 +1,112 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#123047">
-<title>ES3 Trading Assistant</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123047"><title>Private Multi-Stock Trading Assistant</title>
+<link rel="icon" type="image/png" sizes="512x512" href="icon.png"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
 <style>
-:root{--navy:#123047;--teal:#167d78;--bg:#f3f6f8;--card:#fff;--ink:#172b3a;--muted:#607482;--line:#dce5ea;--green:#137547;--red:#b83a3a;--amber:#946200}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}
-header{background:var(--navy);color:white;padding:22px 16px 18px}header h1{font-size:1.45rem;margin:0 0 4px}header p{margin:0;color:#d8e7ed;font-size:.95rem}
-main{max-width:980px;margin:0 auto;padding:14px}.notice{background:#fff8df;border:1px solid #f0d98b;border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:.92rem}
-nav{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}nav button{white-space:nowrap;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:10px 13px;font-weight:650}nav button.active{background:var(--teal);border-color:var(--teal);color:#fff}
-section.panel{display:none}section.panel.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #12304708}.card h2{font-size:1.08rem;margin:0 0 12px}.card h3{font-size:1rem;margin:0 0 8px}.metric{font-size:1.55rem;font-weight:750;letter-spacing:-.02em}.muted{color:var(--muted);font-size:.9rem}.small{font-size:.85rem}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:11px}.field label{display:block;font-weight:650;font-size:.92rem;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #bdcbd3;border-radius:9px;padding:11px 10px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:74px;resize:vertical}button.primary,button.secondary,button.danger{border:0;border-radius:10px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}button.primary{background:var(--teal);color:white}button.secondary{background:#e7eef2;color:var(--navy)}button.danger{background:#fbe9e9;color:#962c2c}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.pill{display:inline-block;border-radius:999px;padding:4px 9px;font-size:.78rem;font-weight:750;background:#e7eef2}.pill.up{background:#e1f4e9;color:#17653b}.pill.down{background:#fbe7e7;color:#a22f2f}.pill.neutral{background:#fff1ce;color:#805600}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-size:.8rem}td button{padding:6px 8px;border:0;border-radius:7px;background:#e7eef2;font-weight:650}.status{font-weight:750}.positive{color:var(--green)}.negative{color:var(--red)}.preview{max-width:100%;max-height:320px;display:none;margin-top:10px;border-radius:10px;border:1px solid var(--line)}.empty{padding:16px;text-align:center;color:var(--muted);background:#f8fafb;border-radius:10px}.footer{font-size:.82rem;color:var(--muted);padding:12px 3px 30px}
-@media(max-width:640px){.grid,.row{grid-template-columns:1fr}.metric{font-size:1.35rem}main{padding:10px}.card{padding:13px}header{padding:18px 13px}}
-</style>
-</head>
+:root{--navy:#123047;--teal:#167d78;--bg:#f3f6f8;--ink:#172b3a;--muted:#607482;--line:#dce5ea;--green:#137547;--red:#b83a3a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,sans-serif}header{background:var(--navy);color:white;padding:20px 15px}header h1{margin:0;font-size:1.4rem}header p{margin:4px 0 0;color:#d8e7ed}main{max-width:1000px;margin:auto;padding:12px}.notice,.card{background:white;border:1px solid var(--line);border-radius:13px;padding:14px;margin-bottom:12px}.notice{background:#fff8df;border-color:#f0d98b}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.metric{font-size:1.45rem;font-weight:750}.muted{color:var(--muted);font-size:.9rem}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:10px}.field label{display:block;font-weight:650;margin-bottom:5px;font-size:.93rem}input,select,textarea{width:100%;padding:11px;border:1px solid #bdcbd3;border-radius:9px;font:inherit;background:white;color:var(--ink)}textarea{min-height:70px}button,.button{border:0;border-radius:9px;padding:11px 13px;font:inherit;font-weight:700;cursor:pointer}button.primary{background:var(--teal);color:white}button.secondary,.button{background:#e7eef2;color:var(--navy)}button.danger{background:#fbe9e9;color:#962c2c}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}nav{display:flex;gap:7px;overflow:auto;margin-bottom:12px}nav button{white-space:nowrap;background:#fff;border:1px solid var(--line)}nav button.active{background:var(--teal);color:#fff}section.panel{display:none}section.panel.active{display:block}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-size:.8rem}.positive{color:var(--green)}.negative{color:var(--red)}.empty{padding:12px;color:var(--muted);background:#f8fafb;border-radius:9px}.counter{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fff}.counter button{flex-shrink:0}.footer{font-size:.82rem;color:var(--muted);padding:12px 3px 28px}.modal{position:fixed;inset:0;background:#102533d9;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px}.modalbox{background:white;border-radius:14px;padding:20px;max-width:620px;width:100%;max-height:90vh;overflow:auto}.hidden{display:none!important}@media(max-width:620px){.grid,.row{grid-template-columns:1fr}main{padding:9px}.metric{font-size:1.3rem}}
+</style></head>
 <body>
-<header><h1>ES3 Trading Assistant</h1><p>Manual decisions • Paper account S$20,000 • One counter: ES3</p></header>
+<header><h1>Private Multi-Stock Trading Assistant</h1><p>Private testing • Manual prices • Paper trading only</p></header>
 <main>
-<div class="notice"><strong>Important:</strong> This is a personal record-keeping and paper-trading tool. It does not fetch live prices or analyse screenshots automatically. Enter prices and signals from your Tiger Brokers chart. No order is placed by this app.</div>
-<nav aria-label="Main sections">
-<button class="active" data-tab="dashboard">Dashboard</button><button data-tab="decision">Chart & Decision</button><button data-tab="trade">Record Execution</button><button data-tab="records">Trade Records</button><button data-tab="backup">Backup</button>
-</nav>
-
+<div class="notice"><strong>Private testing version.</strong> For personal record-keeping and testing only. No live market feed, financial advice or brokerage order execution. Enter the latest price yourself to calculate open-position performance.</div>
+<div class="card"><div class="row"><div><label for="counterSelect"><strong>Current counter</strong></label><select id="counterSelect"></select></div><div><label><strong>Privacy lock</strong></label><div class="actions" style="margin-top:0"><button class="secondary" id="lockToggle">Lock: OFF</button><button class="secondary" id="showDisclaimer">Disclaimer</button></div></div></div><div class="actions"><button class="secondary" id="addCounter">+ Add New Counter</button><button class="secondary" id="renameCounter">Rename Counter</button></div></div>
+<nav aria-label="Main sections"><button class="active" data-tab="dashboard">Dashboard</button><button data-tab="decision">Chart & Decision</button><button data-tab="trade">Record Execution</button><button data-tab="records">Trade Records</button><button data-tab="backup">Backup & Settings</button></nav>
 <section id="dashboard" class="panel active">
 <div class="grid">
-<div class="card"><div class="muted">Paper cash available</div><div class="metric" id="cashMetric">S$20,000.00</div></div>
-<div class="card"><div class="muted">ES3 shares held</div><div class="metric" id="sharesMetric">0</div></div>
-<div class="card"><div class="muted">Realised P/L (net estimated fees)</div><div class="metric" id="realisedMetric">S$0.00</div></div>
-<div class="card"><div class="muted">Open-trade unrealised P/L</div><div class="metric" id="unrealisedMetric">—</div><div class="muted">Enter a current ES3 price on the Chart & Decision tab.</div></div>
+<div class="card"><div class="muted">Paper cash available</div><div class="metric" id="cashMetric">—</div></div><div class="card"><div class="muted">Shares held</div><div class="metric" id="sharesMetric">—</div></div>
+<div class="card"><div class="muted">Realised profit/loss</div><div class="metric" id="realisedMetric">—</div></div><div class="card"><div class="muted">Unrealised profit/loss</div><div class="metric" id="unrealisedMetric">—</div></div>
+<div class="card"><div class="muted">Overall profit/loss</div><div class="metric" id="overallMetric">—</div></div><div class="card"><div class="muted">Overall return</div><div class="metric" id="returnMetric">—</div></div>
+<div class="card"><div class="muted">Closed trades</div><div class="metric" id="closedCount">0</div></div><div class="card"><div class="muted">Closed-trade win rate</div><div class="metric" id="winRate">—</div></div>
 </div>
-<div class="card"><h2>Market snapshot</h2><div class="row">
-<div><div class="muted">STI trend you recorded</div><div id="dashSti" class="status">Not entered</div></div>
-<div><div class="muted">Latest ES3 price entered</div><div id="dashPrice" class="status">Not entered</div></div>
-</div><p class="muted" id="dashTime">No market snapshot saved yet.</p></div>
-<div class="card"><h2>Open trades</h2><div id="openSummary" class="empty">No open trades recorded yet.</div></div>
-<div class="card"><h2>Quick reminder</h2><p>Use the 5-day ES3 Tiger chart as the starting point. If the setup looks promising but intraday details are unclear, add a 1-day chart. The STI direction should be entered from a separate STI view or reliable quote; it cannot be inferred accurately from the ES3 chart alone.</p></div>
+<div class="card"><h2>Performance rating</h2><div class="metric" id="rating">Not rated yet</div><p class="muted" id="ratingNote">A provisional indicator based on your recorded performance, not a prediction of future results.</p></div>
+<div class="card"><h2>Open trades</h2><div id="openSummary" class="empty">No open trades.</div></div>
+<div class="card"><h2>Current price</h2><div class="row"><div class="field"><label for="markPrice">Latest price (S$)</label><input id="markPrice" type="number" min="0" step=".001" placeholder="Enter latest price"></div><div class="field"><label for="markFee">Default fee per execution (S$)</label><input id="markFee" type="number" min="0" step=".01" value="2.00"></div></div><button class="primary" id="saveMark">Save price</button></div>
 </section>
-
-<section id="decision" class="panel">
-<div class="card"><h2>1. Record the chart snapshot</h2>
-<div class="field"><label for="chartImage">Upload Tiger ES3 chart screenshot (preview only)</label><input id="chartImage" type="file" accept="image/*"><img id="chartPreview" class="preview" alt="Chart screenshot preview"><div class="muted">The image is not sent anywhere or saved in the backup. Upload it here for your own viewing, then discuss it in ChatGPT for analysis.</div></div>
-<div class="row">
-<div class="field"><label for="snapDate">Date and time</label><input id="snapDate" type="datetime-local"></div>
-<div class="field"><label for="es3Price">Current ES3 price (S$)</label><input id="es3Price" type="number" min="0" step="0.001" placeholder="e.g. 4.100"></div>
-</div>
-<div class="row">
-<div class="field"><label for="stiTrend">STI day trend</label><select id="stiTrend"><option value="">Choose trend</option><option value="UP">UP day</option><option value="DOWN">DOWN day</option><option value="NEUTRAL">NEUTRAL / sideways</option><option value="RECOVERY">Recovering after decline</option><option value="UNKNOWN">Not checked</option></select></div>
-<div class="field"><label for="stiChange">STI change (%) if known</label><input id="stiChange" type="number" step="0.01" placeholder="e.g. -0.45"></div>
-</div>
-<div class="row">
-<div class="field"><label for="chartTrend">ES3 5-day chart assessment</label><select id="chartTrend"><option value="">Choose assessment</option><option>Rising</option><option>Falling</option><option>Sideways</option><option>Recovering</option><option>Unclear</option></select></div>
-<div class="field"><label for="marketNotes">Notes / chart observations</label><input id="marketNotes" placeholder="e.g. near recent support"></div>
-</div>
-<h3>2. Record the recommendation</h3>
-<div class="row">
-<div class="field"><label for="signal">Action</label><select id="signal"><option>WAIT</option><option>BUY</option><option>SELL</option><option>HOLD</option></select></div>
-<div class="field"><label for="suggestPrice">Suggested price (S$)</label><input id="suggestPrice" type="number" min="0" step="0.001" placeholder="Optional"></div>
-</div>
-<div class="row">
-<div class="field"><label for="suggestQty">Suggested quantity (shares)</label><select id="suggestQty"><option value="100">100</option><option value="200">200</option><option value="300">300</option><option value="400">400</option><option value="500">500</option><option value="0">No trade / not set</option></select></div>
-<div class="field"><label for="decisionStatus">Your decision</label><select id="decisionStatus"><option>Not decided</option><option>Execute</option><option>Wait</option><option>Abandon</option><option>Adjust price</option></select></div>
-</div>
-<div class="field"><label for="decisionNotes">Why you decided this / follow-up</label><textarea id="decisionNotes" placeholder="Record why you executed, waited, adjusted or abandoned."></textarea></div>
-<div class="actions"><button class="primary" id="saveSnapshot">Save market & decision record</button><button class="secondary" id="clearDecision">Clear form</button></div>
-</div>
-<div class="card"><h2>Saved snapshots & decisions</h2><div id="snapshotList" class="empty">No snapshots saved yet.</div></div>
-</section>
-
-<section id="trade" class="panel">
-<div class="card"><h2>Record a paper execution</h2><p class="muted">Enter only after you decide your simulated order would have filled. Use your chosen execution price, not the suggested price. Each BUY creates a separate trade with its own target exit price.</p>
-<div class="row">
-<div class="field"><label for="tradeAction">Execution</label><select id="tradeAction"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
-<div class="field"><label for="tradeDate">Execution date and time</label><input id="tradeDate" type="datetime-local"></div>
-</div>
-<div class="row">
-<div class="field"><label for="tradePrice">Your simulated execution price (S$)</label><input id="tradePrice" type="number" min="0" step="0.001" placeholder="Required"></div>
-<div class="field"><label for="tradeQty">Quantity (shares; 100-share lots)</label><select id="tradeQty"><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option><option>600</option><option>700</option><option>800</option><option>900</option><option>1000</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label for="targetPrice">Target exit price (S$)</label><input id="targetPrice" type="number" min="0" step="0.001" placeholder="Required for BUY"></div>
-<div class="field"><label for="fee">Estimated total fees (S$)</label><input id="fee" type="number" min="0" step="0.01" value="2.00"></div>
-</div>
-<div class="field"><label for="tradeNotes">Trade notes</label><textarea id="tradeNotes" placeholder="Why did you execute? What was the STI trend?"></textarea></div>
-<div class="actions"><button class="primary" id="recordTrade">Record execution</button></div>
-<p class="muted">Selling: select which open trade(s) to close in Trade Records. Sale proceeds and estimated fees will be allocated to the selected trade(s).</p>
-</div>
-<div class="card"><h2>Current price for estimates</h2><div class="row"><div class="field"><label for="markPrice">Current ES3 price (S$)</label><input id="markPrice" type="number" min="0" step="0.001" placeholder="Enter latest price"></div><div class="field"><label for="markFee">Default estimated fee per execution (S$)</label><input id="markFee" type="number" min="0" step="0.01" value="2.00"></div></div><button class="secondary" id="saveMark">Save current price</button></div>
-</section>
-
-<section id="records" class="panel">
-<div class="card"><h2>Open paper trades</h2><div id="openTrades" class="empty">No open trades.</div></div>
-<div class="card"><h2>Closed trades</h2><div id="closedTrades" class="empty">No closed trades.</div></div>
-<div class="card"><h2>Execution history</h2><div id="executionHistory" class="empty">No executions recorded.</div></div>
-<div class="card"><h2>Decision history</h2><div id="decisionHistory" class="empty">No decisions recorded.</div></div>
-</section>
-
-<section id="backup" class="panel">
-<div class="card"><h2>Backup and restore</h2><p>Records are stored in this browser on this device. Export a backup regularly. Clearing browser data or switching devices may remove local records.</p><div class="actions"><button class="primary" id="exportData">Export backup (JSON)</button><label class="secondary" style="display:inline-flex;align-items:center;cursor:pointer">Import backup <input id="importData" type="file" accept=".json,application/json" style="display:none"></label></div><div class="actions"><button class="danger" id="resetPaper">Reset paper account</button></div><p class="muted">Reset deletes this app's local records and returns paper cash to S$20,000. Export a backup first if you want to keep your history.</p></div>
-<div class="card"><h2>Trading rules in this version</h2><ul><li>ES3 only; paper starting capital S$20,000.</li><li>100-share lots; no automatic averaging down.</li><li>All executions are entered manually by you.</li><li>STI trend is recorded as context, not treated as a standalone buy/sell signal.</li><li>No live data feed, automated order placement, or automatic chart interpretation.</li><li>Performance calculations are estimates and depend on the prices and fees entered.</li></ul></div>
-</section>
-<div class="footer">ES3 Trading Assistant • Version 1.0 • Personal decision-support tool, not financial advice.</div>
-</main>
+<section id="decision" class="panel"><div class="card"><h2>Chart & Decision Record</h2><p class="muted">Upload a chart image for local preview only. It is not automatically analysed by this app.</p><div class="field"><label for="chartImage">Chart screenshot</label><input id="chartImage" type="file" accept="image/*"><img id="chartPreview" class="hidden" style="max-width:100%;max-height:280px" alt="Chart preview"></div><div class="row"><div class="field"><label for="snapDate">Date and time</label><input id="snapDate" type="datetime-local"></div><div class="field"><label for="es3Price">Current price (S$)</label><input id="es3Price" type="number" min="0" step=".001"></div></div><div class="row"><div class="field"><label for="stiTrend">Market/index trend</label><select id="stiTrend"><option value="">Choose</option><option>UP</option><option>DOWN</option><option>NEUTRAL</option><option>RECOVERY</option><option>UNKNOWN</option></select></div><div class="field"><label for="chartTrend">Chart assessment</label><select id="chartTrend"><option value="">Choose</option><option>Rising</option><option>Falling</option><option>Sideways</option><option>Recovering</option><option>Unclear</option></select></div></div><div class="row"><div class="field"><label for="signal">Action</label><select id="signal"><option>WAIT</option><option>BUY</option><option>SELL</option><option>HOLD</option></select></div><div class="field"><label for="suggestPrice">Suggested price (S$)</label><input id="suggestPrice" type="number" min="0" step=".001"></div></div><div class="row"><div class="field"><label for="decisionStatus">Your decision</label><select id="decisionStatus"><option>Not decided</option><option>Execute</option><option>Wait</option><option>Abandon</option><option>Adjust price</option></select></div><div class="field"><label for="stiChange">Index change (%) if known</label><input id="stiChange" type="number" step=".01"></div></div><div class="field"><label for="decisionNotes">Notes</label><textarea id="decisionNotes"></textarea></div><button class="primary" id="saveSnapshot">Save decision record</button><h3>History</h3><div id="snapshotList" class="empty">No decisions yet.</div></div></section>
+<section id="trade" class="panel"><div class="card"><h2>Record a paper execution</h2><p class="muted">Use your actual simulated fill price. Every BUY creates an individual trade and target exit.</p><div class="row"><div class="field"><label for="tradeAction">Execution</label><select id="tradeAction"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div><div class="field"><label for="tradeDate">Date and time</label><input id="tradeDate" type="datetime-local"></div></div><div class="row"><div class="field"><label for="tradePrice">Execution price (S$)</label><input id="tradePrice" type="number" min="0" step=".001"></div><div class="field"><label for="tradeQty">Quantity (100-share lots)</label><select id="tradeQty"><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option><option>600</option><option>700</option><option>800</option><option>900</option><option>1000</option></select></div></div><div class="field" id="sellSelectWrap"><label for="sellTradeId">Trade to sell (required for SELL)</label><select id="sellTradeId"></select><div class="muted">Choose the exact trade number. The app will not automatically sell another trade.</div></div><div class="row"><div class="field"><label for="targetPrice">Target exit price (required for BUY)</label><input id="targetPrice" type="number" min="0" step=".001"></div><div class="field"><label for="fee">Estimated total fees (S$)</label><input id="fee" type="number" min="0" step=".01" value="2.00"></div></div><div class="field"><label for="tradeNotes">Notes</label><textarea id="tradeNotes"></textarea></div><button class="primary" id="recordTrade">Record execution</button></div></section>
+<section id="records" class="panel"><div class="card"><h2>Open paper trades</h2><div id="openTrades" class="empty">No open trades.</div></div><div class="card"><h2>Closed trades</h2><div id="closedTrades" class="empty">No closed trades.</div></div><div class="card"><h2>Execution history</h2><div id="executionHistory" class="empty">No executions.</div></div><div class="card"><h2>Decision history</h2><div id="decisionHistory" class="empty">No decisions.</div></div></section>
+<section id="backup" class="panel"><div class="card"><h2>Backup and restore</h2><p>Records are stored in this browser on this device. Export backups regularly. Importing replaces the current records.</p><div class="actions"><button class="primary" id="exportData">Export backup (JSON)</button><label class="button">Import backup <input id="importData" type="file" accept=".json,application/json" style="display:none"></label><button class="danger" id="resetCounter">Reset current counter</button></div><p class="muted">The password lock is a basic screen barrier, not strong encryption. Do not store brokerage passwords or highly sensitive information here.</p><h3>Private Testing & Restricted Use</h3><p>This application is developed exclusively for private testing, personal evaluation and individual use by its owner. Access to, use, copying, distribution, modification or reproduction without the owner's prior permission is prohibited. This application is not intended for public use, commercial distribution, resale or redistribution. All applicable intellectual property rights are reserved. The application is provided “AS IS” without warranties. Prices, calculations and ratings may be inaccurate and are for testing/informational purposes only, not financial advice. Trading involves risk and the user is responsible for all decisions. The app does not place brokerage orders. The owner is responsible for protecting devices, passwords, backups and records. © 2026. All rights reserved. Authorised use only. Legal enforceability depends on applicable law.</p><div class="field"><label for="newPassword">Set/change lock password</label><input id="newPassword" type="password" autocomplete="new-password" placeholder="Choose a password"></div><button class="secondary" id="savePassword">Save password</button></div></section>
+<div class="footer">Private Multi-Stock Trading Assistant • Personal testing tool, not financial advice.</div></main>
+<div id="lockScreen" class="modal hidden"><div class="modalbox"><h2>App Locked</h2><p>Enter your password to continue.</p><div class="field"><label for="unlockPassword">Password</label><input id="unlockPassword" type="password" autocomplete="current-password"></div><button class="primary" id="unlockBtn">Unlock</button><p class="muted" id="unlockError"></p></div></div>
+<div id="disclaimerModal" class="modal hidden"><div class="modalbox"><h2>PRIVATE TESTING — AUTHORISED USE ONLY</h2><p>This application is intended exclusively for private testing and personal use by its owner. Unauthorised access, use, copying, modification, distribution or reproduction without prior permission is prohibited. Not for public use or resale. All applicable rights reserved.</p><p>Provided “AS IS” without warranty. Prices, calculations, performance ratings and analysis are for testing and informational purposes only and are not financial advice. Trading involves risk; the user is responsible for all decisions. No brokerage orders are placed. The app does not guarantee data security. Protect your device, password and backups.</p><p><strong>© 2026. All rights reserved. Private testing version — authorised use only.</strong></p><div class="actions"><button class="primary" id="acceptDisclaimer">I Understand — Continue</button><button class="secondary" id="closeDisclaimer">Close</button></div></div></div>
 <script>
-const START_CASH=20000, KEY='es3TradingAssistantV1';
-const $=id=>document.getElementById(id);
-let state={cash:START_CASH, executions:[], snapshots:[], trades:[], markPrice:null, markFee:2};
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&typeof x==='object')state={...state,...x};}catch(e){}}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));render();}
-function money(n){return 'S$'+Number(n||0).toLocaleString('en-SG',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function num(id){const v=parseFloat($(id).value);return Number.isFinite(v)?v:null}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function dtNow(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
-function initDates(){$('snapDate').value=dtNow();$('tradeDate').value=dtNow()}
-function totalShares(){return state.trades.filter(t=>t.status==='OPEN').reduce((s,t)=>s+t.remaining,0)}
-function realised(){return state.trades.reduce((s,t)=>s+(t.realisedNet||0),0)}
-function unrealised(){if(state.markPrice==null)return null;return state.trades.filter(t=>t.status==='OPEN').reduce((s,t)=>s+((state.markPrice-t.buyPrice)*t.remaining-(t.buyFeeRemaining||0)),0)}
-function render(){
- $('cashMetric').textContent=money(state.cash);$('sharesMetric').textContent=totalShares().toLocaleString('en-SG');
- $('realisedMetric').textContent=money(realised());$('realisedMetric').className='metric '+(realised()>0?'positive':realised()<0?'negative':'');
- const u=unrealised();$('unrealisedMetric').textContent=u===null?'—':money(u);$('unrealisedMetric').className='metric '+(u>0?'positive':u<0?'negative':'');
- const last=state.snapshots[state.snapshots.length-1];$('dashSti').innerHTML=last?`<span class="pill ${last.stiTrend==='UP'?'up':last.stiTrend==='DOWN'?'down':'neutral'}">${esc(last.stiTrend||'UNKNOWN')}</span>`:'Not entered';
- $('dashPrice').textContent=state.markPrice==null?'Not entered':money(state.markPrice);$('dashTime').textContent=last?'Last snapshot: '+esc(last.date.replace('T',' ')):'No market snapshot saved yet.';
- const opens=state.trades.filter(t=>t.status==='OPEN');
- $('openSummary').innerHTML=opens.length?`<div class="table-wrap"><table><thead><tr><th>Trade</th><th>Buy</th><th>Qty left</th><th>Target</th><th>Unrealised*</th></tr></thead><tbody>${opens.map(t=>`<tr><td>${esc(t.id)}</td><td>${money(t.buyPrice)}</td><td>${t.remaining}</td><td>${t.target?money(t.target):'—'}</td><td>${state.markPrice==null?'—':money((state.markPrice-t.buyPrice)*t.remaining-(t.buyFeeRemaining||0))}</td></tr>`).join('')}</tbody></table></div><p class="muted">*Estimated before sale fees.</p>`:'No open trades recorded yet.';
- $('snapshotList').innerHTML=state.snapshots.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>ES3</th><th>STI</th><th>Trend</th><th>Signal</th><th>Your decision</th></tr></thead><tbody>${state.snapshots.slice().reverse().map(s=>`<tr><td>${esc(s.date.replace('T',' '))}</td><td>${s.price==null?'—':money(s.price)}</td><td>${s.stiChange==null?'—':s.stiChange+'%'}</td><td>${esc(s.stiTrend||'—')}</td><td>${esc(s.signal)}</td><td>${esc(s.decisionStatus)}</td></tr>`).join('')}</tbody></table></div>`:'No snapshots saved yet.';
- const open=state.trades.filter(t=>t.status==='OPEN'), closed=state.trades.filter(t=>t.status==='CLOSED');
- $('openTrades').innerHTML=open.length?`<div class="table-wrap"><table><thead><tr><th>Trade</th><th>Buy date</th><th>Buy price</th><th>Remaining</th><th>Target</th><th>Action</th></tr></thead><tbody>${open.map(t=>`<tr><td>${esc(t.id)}</td><td>${esc(t.date.replace('T',' '))}</td><td>${money(t.buyPrice)}</td><td>${t.remaining}</td><td>${t.target?money(t.target):'—'}</td><td><button onclick="closeTrade('${t.id}')">Record SELL</button></td></tr>`).join('')}</tbody></table></div>`:'No open trades.';
- $('closedTrades').innerHTML=closed.length?`<div class="table-wrap"><table><thead><tr><th>Trade</th><th>Buy</th><th>Sell</th><th>Qty</th><th>Net P/L</th><th>Notes</th></tr></thead><tbody>${closed.slice().reverse().map(t=>`<tr><td>${esc(t.id)}</td><td>${money(t.buyPrice)}</td><td>${money(t.sellPrice)}</td><td>${t.soldQty}</td><td class="${t.realisedNet>=0?'positive':'negative'}">${money(t.realisedNet)}</td><td>${esc(t.closeNotes||'')}</td></tr>`).join('')}</tbody></table></div>`:'No closed trades.';
- $('executionHistory').innerHTML=state.executions.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Action</th><th>Price</th><th>Qty</th><th>Fees</th><th>Notes</th></tr></thead><tbody>${state.executions.slice().reverse().map(e=>`<tr><td>${esc(e.date.replace('T',' '))}</td><td>${esc(e.action)}</td><td>${money(e.price)}</td><td>${e.qty}</td><td>${money(e.fee)}</td><td>${esc(e.notes||'')}</td></tr>`).join('')}</tbody></table></div>`:'No executions recorded.';
- $('decisionHistory').innerHTML=state.snapshots.length?`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Signal</th><th>Suggested price</th><th>Decision</th><th>Notes</th></tr></thead><tbody>${state.snapshots.slice().reverse().map(s=>`<tr><td>${esc(s.date.replace('T',' '))}</td><td>${esc(s.signal)}</td><td>${s.suggestPrice==null?'—':money(s.suggestPrice)}</td><td>${esc(s.decisionStatus)}</td><td>${esc(s.decisionNotes||'')}</td></tr>`).join('')}</tbody></table></div>`:'No decisions recorded.';
+const START_CASH=20000, KEY='privateMultiStockTradingAssistantV2', OLD_KEY='es3TradingAssistantV1', $=id=>document.getElementById(id);
+let app={counters:[],activeId:'',lockEnabled:false,passwordHash:'',disclaimerAccepted:false};
+let state=null;
+const uid=()=>Math.random().toString(36).slice(2,10);
+function blankCounter(name,symbol,capital=START_CASH){return {id:uid(),name,symbol,capital,cash:capital,executions:[],snapshots:[],trades:[],markPrice:null,markFee:2}}
+function active(){return app.counters.find(c=>c.id===app.activeId)||app.counters[0]}
+function money(n){return 'S$'+Number(n||0).toLocaleString('en-SG',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function num(id){let n=parseFloat($(id).value);return Number.isFinite(n)?n:null}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function now(){let d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+function save(){if(state){let i=app.counters.findIndex(c=>c.id===app.activeId);if(i>=0)app.counters[i]=state}localStorage.setItem(KEY,JSON.stringify(app));render()}
+function load(){
+ try{let x=JSON.parse(localStorage.getItem(KEY));if(x&&Array.isArray(x.counters))app={...app,...x}}catch(e){}
+ if(!app.counters.length){let old=null;try{old=JSON.parse(localStorage.getItem(OLD_KEY))}catch(e){}let c=blankCounter('ES3 — STI ETF','ES3',START_CASH);if(old){c={...c,...old,id:c.id,name:'ES3 — STI ETF',symbol:'ES3',capital:START_CASH};if(!Number.isFinite(c.cash))c.cash=START_CASH}app.counters=[c];app.activeId=c.id}
+ if(!active())app.activeId=app.counters[0].id;state=active();
 }
-document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('section.panel').forEach(s=>s.classList.toggle('active',s.id===b.dataset.tab));}));
-$('chartImage').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);$('chartPreview').src=url;$('chartPreview').style.display='block';});
-$('saveSnapshot').addEventListener('click',()=>{
- const s={id:'D'+String(state.snapshots.length+1).padStart(3,'0'),date:$('snapDate').value||dtNow(),price:num('es3Price'),stiTrend:$('stiTrend').value,stiChange:num('stiChange'),chartTrend:$('chartTrend').value,notes:$('marketNotes').value,signal:$('signal').value,suggestPrice:num('suggestPrice'),suggestQty:Number($('suggestQty').value),decisionStatus:$('decisionStatus').value,decisionNotes:$('decisionNotes').value};
- if(s.price!==null){state.markPrice=s.price;$('markPrice').value=s.price}
- state.snapshots.push(s);save();alert('Market snapshot and decision saved.');
-});
-$('clearDecision').addEventListener('click',()=>{['es3Price','stiChange','marketNotes','suggestPrice','decisionNotes'].forEach(id=>$(id).value='');$('stiTrend').value='';$('chartTrend').value='';$('signal').value='WAIT';$('suggestQty').value='100';$('decisionStatus').value='Not decided';$('snapDate').value=dtNow();});
-$('saveMark').addEventListener('click',()=>{const p=num('markPrice');if(p===null||p<=0){alert('Enter a valid current ES3 price.');return;}state.markPrice=p;const f=num('markFee');if(f!==null&&f>=0)state.markFee=f;save();alert('Current price saved for estimates.');});
+function shares(){return state.trades.filter(t=>t.status==='OPEN').reduce((s,t)=>s+t.remaining,0)}
+function realised(){return state.trades.reduce((s,t)=>s+(t.realisedNet||0),0)}
+function unrealised(){if(state.markPrice==null)return null;return state.trades.filter(t=>t.status==='OPEN').reduce((s,t)=>s+(state.markPrice-t.buyPrice)*t.remaining-(t.buyFeeRemaining||0),0)}
+function allClosed(){return state.trades.filter(t=>t.status==='CLOSED' || (t.soldQty||0)>0)}
+function tradeNet(t){return Number(t.realisedNet||0)}
+function render(){
+ if(!state)return;
+ $('counterSelect').innerHTML=app.counters.map(c=>`<option value="${c.id}" ${c.id===app.activeId?'selected':''}>${esc(c.name)} (${esc(c.symbol)})</option>`).join('');
+ $('lockToggle').textContent='Lock: '+(app.lockEnabled?'ON':'OFF');
+ $('cashMetric').textContent=money(state.cash);$('sharesMetric').textContent=shares().toLocaleString('en-SG');
+ let r=realised(),u=unrealised(),overall=r+(u??0),ret=state.capital?overall/state.capital*100:0;
+ setMetric('realisedMetric',r);$('unrealisedMetric').textContent=u===null?'Enter current price':money(u);$('unrealisedMetric').className='metric '+(u>0?'positive':u<0?'negative':'');
+ $('overallMetric').textContent=u===null?money(r)+' realised':money(overall);$('overallMetric').className='metric '+(overall>0?'positive':overall<0?'negative':'');
+ $('returnMetric').textContent=u===null?'—':ret.toFixed(2)+'%';$('returnMetric').className='metric '+(ret>0?'positive':ret<0?'negative':'');
+ const closed=allClosed(),wins=closed.filter(t=>tradeNet(t)>0).length,losses=closed.filter(t=>tradeNet(t)<0).length;
+ $('closedCount').textContent=closed.length;$('winRate').textContent=closed.length?(wins/closed.length*100).toFixed(1)+'%':'—';
+ // A deliberately simple, transparent indicative score; not a forecast.
+ const profitability=u===null?50:Math.max(0,Math.min(100,50+ret*10)),winScore=closed.length?wins/closed.length*100:50;
+ const riskScore=closed.length?Math.max(0,Math.min(100,100-(losses/closed.length*100))):50;
+ $('rating').textContent=(.4*profitability+.3*winScore+.3*riskScore).toFixed(0)+'%';
+ $('ratingNote').textContent='Indicative score: 40% profitability, 30% closed-trade win rate, 30% share of closed trades not losing. It is not a measure of future success. '+(closed.length?'Wins: '+wins+' • Losses: '+losses:'Record closed trades to make the rating more meaningful.');
+ let opens=state.trades.filter(t=>t.status==='OPEN');
+ $('openSummary').innerHTML=opens.length?table(['Trade','Buy price','Remaining','Target','Unrealised P/L','Action'],opens.map(t=>[esc(t.id),money(t.buyPrice),t.remaining,t.target?money(t.target):'—',state.markPrice===null?'—':money((state.markPrice-t.buyPrice)*t.remaining-(t.buyFeeRemaining||0)),`<button onclick="prepareSell('${t.id}')">Sell this trade</button>`])):'No open trades.';
+ $('openTrades').innerHTML=opens.length?table(['Trade','Buy date','Buy price','Remaining','Target','Action'],opens.map(t=>[esc(t.id),esc((t.date||'').replace('T',' ')),money(t.buyPrice),t.remaining,t.target?money(t.target):'—',`<button onclick="prepareSell('${t.id}')">Record SELL</button>`])):'No open trades.';
+ let closedTrades=state.trades.filter(t=>t.status==='CLOSED'||(t.soldQty||0)>0);
+ $('closedTrades').innerHTML=closedTrades.length?table(['Trade','Buy','Last sell','Shares sold','Net P/L','Status'],closedTrades.slice().reverse().map(t=>[esc(t.id),money(t.buyPrice),t.sellPrice?money(t.sellPrice):'Partial',t.soldQty||0,`<span class="${tradeNet(t)>=0?'positive':'negative'}">${money(tradeNet(t))}</span>`,t.status==='CLOSED'?'Closed':'Partially sold'])):'No closed trades.';
+ $('executionHistory').innerHTML=state.executions.length?table(['Date','Action','Price','Qty','Fees','Trade','Notes'],state.executions.slice().reverse().map(e=>[esc((e.date||'').replace('T',' ')),esc(e.action),money(e.price),e.qty,money(e.fee),esc(e.tradeId||'—'),esc(e.notes||'')])):'No executions.';
+ $('decisionHistory').innerHTML=state.snapshots.length?table(['Date','Signal','Price','Index trend','Decision','Notes'],state.snapshots.slice().reverse().map(s=>[esc((s.date||'').replace('T',' ')),esc(s.signal),s.price==null?'—':money(s.price),esc(s.stiTrend||'—'),esc(s.decisionStatus||'—'),esc(s.decisionNotes||'')])):'No decisions.';
+ $('snapshotList').innerHTML=$('decisionHistory').innerHTML;
+ $('markPrice').value=state.markPrice??'';$('markFee').value=state.markFee??2;
+ updateSellOptions();
+}
+function setMetric(id,n){$(id).textContent=money(n);$(id).className='metric '+(n>0?'positive':n<0?'negative':'')}
+function table(headers,rows){return `<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function updateSellOptions(preferred=''){let opens=state.trades.filter(t=>t.status==='OPEN'&&t.remaining>0);$('sellTradeId').innerHTML=opens.length?opens.map(t=>`<option value="${t.id}">${t.id} • Buy ${money(t.buyPrice)} • ${t.remaining} shares • Target ${t.target?money(t.target):'—'}</option>`).join(''):'<option value="">No open trades</option>';if(preferred&&opens.some(t=>t.id===preferred))$('sellTradeId').value=preferred;$('sellSelectWrap').classList.toggle('hidden',$('tradeAction').value!=='SELL')}
+window.prepareSell=function(id){$('tradeAction').value='SELL';$('sellSelectWrap').classList.remove('hidden');updateSellOptions(id);let t=state.trades.find(x=>x.id===id);if(t){$('tradeQty').value=String(Math.min(t.remaining,1000));$('tradeNotes').value='Closing trade '+id;}document.querySelector('nav button[data-tab="trade"]').click();$('tradePrice').focus()}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('section.panel').forEach(s=>s.classList.toggle('active',s.id===b.dataset.tab))}));
+$('counterSelect').addEventListener('change',()=>{save();app.activeId=$('counterSelect').value;state=active();save();});
+$('addCounter').addEventListener('click',()=>{let name=prompt('Enter stock/company name (e.g. Singtel):');if(!name||!name.trim())return;let symbol=prompt('Enter SGX ticker/symbol (e.g. Z74):');if(!symbol||!symbol.trim())return;if(app.counters.some(c=>c.symbol.toUpperCase()===symbol.trim().toUpperCase())){alert('That ticker already exists. Choose the existing counter or enter a different ticker.');return}let cap=prompt('Starting paper capital in S$','5000');cap=Number(cap);if(!Number.isFinite(cap)||cap<=0){alert('Enter a valid positive starting capital.');return}let c=blankCounter(name.trim(),symbol.trim().toUpperCase(),cap);app.counters.push(c);app.activeId=c.id;state=c;save();alert('Counter created. Its records and cash are separate.')});
+$('renameCounter').addEventListener('click',()=>{let name=prompt('Display name',state.name);if(!name||!name.trim())return;let symbol=prompt('Ticker/symbol',state.symbol);if(!symbol||!symbol.trim())return;state.name=name.trim();state.symbol=symbol.trim().toUpperCase();save()});
+$('lockToggle').addEventListener('click',()=>{if(!app.passwordHash){alert('Set a password in Backup & Settings before turning the lock on.');document.querySelector('nav button[data-tab="backup"]').click();return}app.lockEnabled=!app.lockEnabled;save();if(app.lockEnabled){$('lockScreen').classList.remove('hidden')}else $('lockScreen').classList.add('hidden')});
+async function hash(s){const data=new TextEncoder().encode(s);const digest=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+$('savePassword').addEventListener('click',async()=>{let p=$('newPassword').value;if(p.length<6){alert('Use at least 6 characters.');return}app.passwordHash=await hash(p);$('newPassword').value='';save();alert('Password saved. Remember it: there is no password recovery function.')});
+$('unlockBtn').addEventListener('click',async()=>{if(await hash($('unlockPassword').value)===app.passwordHash){$('lockScreen').classList.add('hidden');$('unlockPassword').value='';$('unlockError').textContent=''}else $('unlockError').textContent='Incorrect password. Try again.'});
+$('showDisclaimer').addEventListener('click',()=>$('disclaimerModal').classList.remove('hidden'));$('acceptDisclaimer').addEventListener('click',()=>{app.disclaimerAccepted=true;save();$('disclaimerModal').classList.add('hidden')});$('closeDisclaimer').addEventListener('click',()=>$('disclaimerModal').classList.add('hidden'));
+$('saveMark').addEventListener('click',()=>{let p=num('markPrice'),f=num('markFee');if(p===null||p<=0){alert('Enter a valid current price.');return}state.markPrice=p;if(f!==null&&f>=0)state.markFee=f;save()});
+$('saveSnapshot').addEventListener('click',()=>{let s={id:'D'+String(state.snapshots.length+1).padStart(3,'0'),date:$('snapDate').value||now(),price:num('es3Price'),stiTrend:$('stiTrend').value,stiChange:num('stiChange'),chartTrend:$('chartTrend').value,signal:$('signal').value,suggestPrice:num('suggestPrice'),decisionStatus:$('decisionStatus').value,decisionNotes:$('decisionNotes').value};if(s.price!==null)state.markPrice=s.price;state.snapshots.push(s);save();alert('Decision record saved.')});
+$('tradeAction').addEventListener('change',()=>{$('sellSelectWrap').classList.toggle('hidden',$('tradeAction').value!=='SELL');updateSellOptions()});
 $('recordTrade').addEventListener('click',()=>{
- const action=$('tradeAction').value,price=num('tradePrice'),qty=Number($('tradeQty').value),fee=num('fee')??state.markFee,target=num('targetPrice');
- if(price===null||price<=0){alert('Enter a valid execution price.');return;}
- if(qty<=0||qty%100!==0){alert('Quantity must be in 100-share lots.');return;}
- if(fee<0){alert('Fees cannot be negative.');return;}
- if(action==='BUY'){
-   const cost=price*qty+fee;if(cost>state.cash){alert('Insufficient paper cash. Available: '+money(state.cash));return;}
-   if(target!==null&&target<=price){alert('Target exit price should be above the buy price.');return;}
-   const id='T'+String(state.trades.length+1).padStart(4,'0');
-   state.cash-=cost;state.trades.push({id,date:$('tradeDate').value||dtNow(),buyPrice:price,buyQty:qty,remaining:qty,target:target, buyFeeRemaining:fee, status:'OPEN',buyFee:fee, notes:$('tradeNotes').value, realisedNet:0});
- }else{
-   const opens=state.trades.filter(t=>t.status==='OPEN');const available=opens.reduce((s,t)=>s+t.remaining,0);
-   if(qty>available){alert('You only have '+available+' open paper shares to sell.');return;}
-   let left=qty;const selected=[];
-   // Allocate sale to oldest open trades (FIFO), recording cost basis and fees.
-   for(const t of opens.sort((a,b)=>a.date.localeCompare(b.date))){if(left<=0)break;const n=Math.min(left,t.remaining);selected.push({t,n});left-=n;}
-   const gross=price*qty;state.cash+=gross-fee;
-   let feeLeft=fee;
-   selected.forEach(({t,n},i)=>{const shareFee=fee*(n/qty);const buyFeeShare=(t.buyFeeRemaining||0)*(n/t.remaining);const pnl=(price-t.buyPrice)*n-shareFee-buyFeeShare;t.realisedNet=(t.realisedNet||0)+pnl;t.buyFeeRemaining=(t.buyFeeRemaining||0)-buyFeeShare;t.remaining-=n;t.soldQty=(t.soldQty||0)+n;t.sellPrice=price;t.closeNotes=$('tradeNotes').value||'';if(t.remaining===0){t.status='CLOSED';t.sellDate=$('tradeDate').value||dtNow();} });
- }
- state.executions.push({date:$('tradeDate').value||dtNow(),action,price,qty,fee,notes:$('tradeNotes').value||'',target});
- if(action==='BUY'&&target!==null){/* target retained on trade record */}
- save();$('tradePrice').value='';$('targetPrice').value='';$('tradeNotes').value='';$('tradeDate').value=dtNow();alert('Execution recorded in the paper account.');
-});
-window.closeTrade=function(id){const t=state.trades.find(x=>x.id===id&&x.status==='OPEN');if(!t)return;document.querySelector('nav button[data-tab="trade"]').click();$('tradeAction').value='SELL';$('tradeQty').value=String(Math.min(t.remaining,100));if(t.remaining>100){const options=Array.from($('tradeQty').options).map(o=>Number(o.value));const fit=options.filter(n=>n<=t.remaining&&n%100===0).pop();if(fit)$('tradeQty').value=String(fit);} $('tradeNotes').value='Closing trade '+id+'; '+(t.remaining>Number($('tradeQty').value)?'partial sale':'');$('tradePrice').focus();};
-$('exportData').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='es3-paper-trading-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);});
-$('importData').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!Array.isArray(x.trades)||!Array.isArray(x.executions)||!Array.isArray(x.snapshots))throw new Error('Invalid backup format');if(!confirm('Import this backup and replace the current local records?'))return;state={...{cash:START_CASH,executions:[],snapshots:[],trades:[],markPrice:null,markFee:2},...x};save();alert('Backup imported.');}catch(err){alert('Could not import this file: '+err.message)}e.target.value='';});
-$('resetPaper').addEventListener('click',()=>{if(!confirm('Delete all local trades, snapshots and records and reset paper cash to S$20,000? Export a backup first if needed.'))return;state={cash:START_CASH,executions:[],snapshots:[],trades:[],markPrice:null,markFee:2};save();alert('Paper account reset.');});
-load();initDates();$('markFee').value=state.markFee;if(state.markPrice!==null)$('markPrice').value=state.markPrice;render();
-</script>
-</body>
-</html>
+ const action=$('tradeAction').value,price=num('tradePrice'),qty=Number($('tradeQty').value),fee=num('fee')??state.markFee,target=num('targetPrice'),date=$('tradeDate').value||now();
+ if(price===null||price<=0){alert('Enter a valid execution price.');return}if(qty<=0||qty%100!==0){alert('Quantity must be in 100-share lots.');return}if(fee<0){alert('Fees cannot be negative.');return}
+ if(action==='BUY'){if(target===null||target<=price){alert('Enter a target exit price above the buy price.');return}let cost=price*qty+fee;if(cost>state.cash){alert('Insufficient paper cash. Available: '+money(state.cash));return}let id='T'+String(state.trades.length+1).padStart(4,'0');state.cash-=cost;state.trades.push({id,date,buyPrice:price,buyQty:qty,remaining:qty,target,buyFeeRemaining:fee,status:'OPEN',buyFee:fee,notes:$('tradeNotes').value,realisedNet:0,soldQty:0})}
+ else {let id=$('sellTradeId').value,t=state.trades.find(x=>x.id===id&&x.status==='OPEN');if(!t){alert('Select the exact open trade to sell.');return}if(qty>t.remaining){alert('Selected trade '+id+' has only '+t.remaining+' shares remaining. Choose a smaller quantity.');return}if(!confirm('Confirm SELL '+qty+' shares from '+id+' at '+money(price)+'? This will not sell any other trade.'))return;let gross=price*qty,shareFee=fee,buyFeeShare=(t.buyFeeRemaining||0)*(qty/t.remaining),pnl=(price-t.buyPrice)*qty-shareFee-buyFeeShare;state.cash+=gross-fee;t.realisedNet=(t.realisedNet||0)+pnl;t.buyFeeRemaining=(t.buyFeeRemaining||0)-buyFeeShare;t.remaining-=qty;t.soldQty=(t.soldQty||0)+qty;t.sellPrice=price;t.closeNotes=$('tradeNotes').value||'';t.sellDate=date;if(t.remaining===0)t.status='CLOSED';t.lastSaleNet=pnl}
+ state.executions.push({date,action,price,qty,fee,notes:$('tradeNotes').value||'',tradeId:action==='SELL'?$('sellTradeId').value:state.trades[state.trades.length-1].id,target:action==='BUY'?target:null});save();$('tradePrice').value='';$('targetPrice').value='';$('tradeNotes').value='';$('tradeDate').value=now();alert('Execution recorded.');});
+$('exportData').addEventListener('click',()=>{save();let blob=new Blob([JSON.stringify(app,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='private-trading-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+$('importData').addEventListener('change',async e=>{let f=e.target.files[0];if(!f)return;try{let x=JSON.parse(await f.text());if(!x||!Array.isArray(x.counters))throw Error('This backup does not contain multi-stock counters.');if(!confirm('Replace all current counters and records with this backup? Export your current backup first if needed.'))return;app=x;state=active();save();alert('Backup imported.')}catch(err){alert('Import failed: '+err.message)}e.target.value=''});
+$('resetCounter').addEventListener('click',()=>{if(!confirm('Reset only '+state.name+'? This permanently deletes its local records. Export a backup first if needed.'))return;let i=app.counters.findIndex(c=>c.id===app.activeId);app.counters[i]=blankCounter(state.name,state.symbol,state.capital);state=app.counters[i];save();alert('Current counter reset.')});
+$('chartImage').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;$('chartPreview').src=URL.createObjectURL(f);$('chartPreview').classList.remove('hidden')});
+$('snapDate').value=now();$('tradeDate').value=now();load();render();
+if(!app.disclaimerAccepted)$('disclaimerModal').classList.remove('hidden');if(app.lockEnabled)$('lockScreen').classList.remove('hidden');
+</script></body></html>
